@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Top Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/backFromReminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="← BACK"
+                android:textSize="12sp"
+                android:backgroundTint="@color/primary_dark"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="BOARDING ALARM"
+                android:textColor="@color/primary_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Flight Info Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="@color/primary_dark"
+            android:padding="20dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FLIGHT BOARDING TIME"
+                android:textColor="#BBDEFB"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/reminderFlightInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✈️ AI 302 • Terminal 2, Gate B24"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/boardingTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Boarding Starts: 18:00 (Departure: 18:30)"
+                android:textColor="#81C784"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Alarm Options -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Alarm Interval (AlarmManager):"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <RadioGroup
+            android:id="@+id/reminderRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/radioTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🧪 10 Seconds Test Alarm (Instant Demo)"
+                android:textSize="15sp"
+                android:checked="true"
+                android:textColor="@color/accent"
+                android:textStyle="bold"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="15 minutes before boarding"
+                android:textSize="15sp"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30 minutes before boarding"
+                android:textSize="15sp"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="60 minutes before boarding"
+                android:textSize="15sp"
+                android:padding="8dp" />
+        </RadioGroup>
+
+        <!-- Set Alarm Button -->
+        <Button
+            android:id="@+id/setReminderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="⏰ SCHEDULE ALARM (ALARM MANAGER)"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Cancel Alarm Button -->
+        <Button
+            android:id="@+id/cancelAlarmBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="🚫 CANCEL ACTIVE ALARM"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#D32F2F"
+            android:textColor="@color/white"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Status Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_segmented_switch"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALARM MANAGER STATUS"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/reminderStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No active alarm set."
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/alarmDetailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="When triggered by AlarmManager, a loud boarding ringtone and heads-up notification will appear even if the app is closed."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

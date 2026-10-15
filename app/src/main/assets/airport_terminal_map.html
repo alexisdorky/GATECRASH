@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=3.0, minimum-scale=0.5">
+<title>Airport Terminal Interactive Map</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+  body, html { width: 100%; height: 100%; overflow: hidden; background: #0F172A; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+  #map-viewport {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+  }
+  #map-viewport:active { cursor: grabbing; }
+
+  #map-canvas-container {
+    width: 1400px;
+    height: 900px;
+    position: absolute;
+    transform-origin: 0 0;
+    transition: transform 0.05s ease-out;
+  }
+
+  /* SVG Architectural Blueprint styling */
+  svg.blueprint {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+  }
+
+  .concourse-bg { fill: #1E293B; stroke: #334155; stroke-width: 3; }
+  .corridor { fill: #0F172A; stroke: #38BDF8; stroke-width: 1.5; stroke-dasharray: 4,4; opacity: 0.6; }
+  .gate-room { fill: #0F172A; stroke: #475569; stroke-width: 2; transition: all 0.3s; }
+  .gate-room:hover { fill: #1E3A8A; stroke: #60A5FA; }
+  .gate-text { fill: #94A3B8; font-size: 13px; font-weight: 700; text-anchor: middle; font-family: monospace; }
+  .concourse-label { fill: #38BDF8; font-size: 20px; font-weight: 800; letter-spacing: 3px; opacity: 0.8; }
+  .zone-label { fill: #64748B; font-size: 14px; font-weight: 600; text-anchor: middle; }
+
+  /* Interactive Markers */
+  .pin {
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s;
+  }
+  .pin:hover, .pin.selected {
+    transform: scale(1.35);
+  }
+  .pin-circle {
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+  }
+  .pin-pulse {
+    animation: pulseAnimation 2s infinite;
+    transform-origin: center;
+  }
+  @keyframes pulseAnimation {
+    0% { r: 16; opacity: 0.8; }
+    70% { r: 28; opacity: 0; }
+    100% { r: 16; opacity: 0; }
+  }
+
+  /* User Location Marker */
+  .user-pulse {
+    animation: userPulse 1.8s infinite;
+  }
+  @keyframes userPulse {
+    0% { r: 10; opacity: 0.9; }
+    50% { r: 26; opacity: 0.2; }
+    100% { r: 34; opacity: 0; }
+  }
+
+  /* Walking Route Path */
+  .walking-route {
+    stroke: #00E5FF;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    stroke-dasharray: 10, 10;
+    animation: marchingAnts 1s linear infinite;
+    filter: drop-shadow(0 0 8px #00E5FF);
+  }
+  @keyframes marchingAnts {
+    from { stroke-dashoffset: 20; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Map HUD Controls */
+  .hud-panel {
+    position: absolute;
+    bottom: 24px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+  .hud-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #F8FAFC;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background 0.2s, transform 0.1s;
+  }
+  .hud-btn:active {
+    transform: scale(0.92);
+    background: #0284C7;
+  }
+
+  .terminal-info-pill {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 8px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #F8FAFC;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 90;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 8px #10B981;
+    animation: livePulse 1.5s infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .nav-active-badge {
+    position: absolute;
+    top: 56px;
+    left: 16px;
+    background: rgba(2, 132, 199, 0.95);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 16px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    z-index: 90;
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.5);
+    animation: slideInDown 0.3s ease-out;
+  }
+  @keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div id="map-viewport">
+  <div class="terminal-info-pill">
+    <div class="live-dot"></div>
+    <span id="airport-tag">MUMBAI TERMINAL 2 • CONCOURSE LEVEL</span>
+  </div>
+
+  <div id="nav-badge" class="nav-active-badge">
+    <span>🚶 Walking Guidance Active</span>
+  </div>
+
+  <div id="map-canvas-container">
+    <svg class="blueprint" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" stroke-width="0.8" opacity="0.3" />
+        </pattern>
+        <linearGradient id="hallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1E293B" />
+          <stop offset="100%" stop-color="#0F172A" />
+        </linearGradient>
+      </defs>
+
+      <!-- Background Grid -->
+      <rect width="1400" height="900" fill="url(#grid)" />
+
+      <!-- ================= ARCHITECTURAL LAYOUT ================= -->
+
+      <!-- Main Concourse Spine (East-West) -->
+      <rect x="220" y="360" width="960" height="180" rx="20" class="concourse-bg" />
+
+      <!-- North Wing (Concourse A) -->
+      <rect x="300" y="100" width="160" height="280" rx="16" class="concourse-bg" />
+      <text x="380" y="80" class="concourse-label" text-anchor="middle">CONCOURSE A</text>
+
+      <!-- South Wing (Concourse B) -->
+      <rect x="940" y="520" width="160" height="290" rx="16" class="concourse-bg" />
+      <text x="1020" y="845" class="concourse-label" text-anchor="middle">CONCOURSE B</text>
+
+      <!-- Central Grand Rotunda & Duty Free Plaza -->
+      <circle cx="700" cy="450" r="130" fill="url(#hallGrad)" stroke="#38BDF8" stroke-width="3" />
+      <circle cx="700" cy="450" r="100" fill="none" stroke="#334155" stroke-dasharray="6,6" stroke-width="2" />
+      <text x="700" y="445" class="concourse-label" text-anchor="middle">CENTRAL ROTUNDA</text>
+      <text x="700" y="470" class="zone-label">DUTY FREE &amp; ATRIUM</text>
+
+      <!-- Walking Corridor Centerlines -->
+      <path d="M 380 120 L 380 450 L 1020 450 L 1020 780" class="corridor" />
+      <path d="M 240 450 L 1160 450" class="corridor" />
+
+      <!-- ================= GATES SECTION ================= -->
+      <!-- Concourse A Gates (A1 to A8) -->
+      <g id="gates-a">
+        <!-- West side gates -->
+        <rect x="230" y="120" width="60" height="50" rx="6" class="gate-room" /><text x="260" y="150" class="gate-text">A01</text>
+        <rect x="230" y="190" width="60" height="50" rx="6" class="gate-room" /><text x="260" y="220" class="gate-text">A03</text>
+        <rect x="230" y="260" width="60" height="50" rx="6" class="gate-room" /><text x="260" y="290" class="gate-text">A05</text>
+        <rect x="230" y="330" width="60" height="50" rx="6" class="gate-room" /><text x="260" y="360" class="gate-text">A07</text>
+        <!-- East side gates -->
+        <rect x="470" y="120" width="60" height="50" rx="6" class="gate-room" /><text x="500" y="150" class="gate-text">A02</text>
+        <rect x="470" y="190" width="60" height="50" rx="6" class="gate-room" /><text x="500" y="220" class="gate-text">A04</text>
+        <rect x="470" y="260" width="60" height="50" rx="6" class="gate-room" /><text x="500" y="290" class="gate-text">A06</text>
+        <rect x="470" y="330" width="60" height="50" rx="6" class="gate-room" /><text x="500" y="360" class="gate-text">A10</text>
+      </g>
+
+      <!-- Concourse B Gates (B15 to B26) -->
+      <g id="gates-b">
+        <!-- West side gates -->
+        <rect x="870" y="550" width="60" height="50" rx="6" class="gate-room" /><text x="900" y="580" class="gate-text">B15</text>
+        <rect x="870" y="620" width="60" height="50" rx="6" class="gate-room" /><text x="900" y="650" class="gate-text">B17</text>
+        <rect x="870" y="690" width="60" height="50" rx="6" class="gate-room" /><text x="900" y="720" class="gate-text">B21</text>
+        <rect x="870" y="760" width="60" height="50" rx="6" class="gate-room" /><text x="900" y="790" class="gate-text">B23</text>
+        <!-- East side gates -->
+        <rect x="1110" y="550" width="60" height="50" rx="6" class="gate-room" /><text x="1140" y="580" class="gate-text">B16</text>
+        <rect x="1110" y="620" width="60" height="50" rx="6" class="gate-room" /><text x="1140" y="650" class="gate-text">B18</text>
+        <rect x="1110" y="690" width="60" height="50" rx="6" class="gate-room" /><text x="1140" y="720" class="gate-text">B22</text>
+        <rect x="1110" y="760" width="60" height="50" rx="6" class="gate-room" fill="#1E3A8A" stroke="#00E5FF" stroke-width="2.5" /><text x="1140" y="790" class="gate-text" fill="#00E5FF">B24 ★</text>
+      </g>
+
+      <!-- Entrance & Security Zone (West End) -->
+      <g id="security-zone">
+        <rect x="70" y="380" width="130" height="140" rx="14" fill="#1E293B" stroke="#64748B" stroke-width="2" />
+        <text x="135" y="440" class="gate-text" fill="#38BDF8">SECURITY</text>
+        <text x="135" y="465" class="gate-text" fill="#38BDF8">CHECKPOINT</text>
+        <line x1="200" y1="410" x2="200" y2="490" stroke="#EF4444" stroke-width="3" stroke-dasharray="4,4" />
+      </g>
+
+      <!-- Arrivals & Baggage Reclaim (East End) -->
+      <g id="baggage-zone">
+        <rect x="1200" y="380" width="150" height="140" rx="14" fill="#1E293B" stroke="#64748B" stroke-width="2" />
+        <text x="1275" y="435" class="gate-text" fill="#10B981">BAGGAGE</text>
+        <text x="1275" y="460" class="gate-text" fill="#10B981">CLAIM (BELTS)</text>
+      </g>
+
+      <!-- ================= WALKING ROUTE (DYNAMIC) ================= -->
+      <path id="dynamic-walking-route" d="" class="walking-route" />
+
+      <!-- ================= USER LOCATION (LIVE BEACON) ================= -->
+      <g id="user-location-marker" transform="translate(680, 480)">
+        <circle cx="0" cy="0" r="26" fill="#0284C7" class="user-pulse" />
+        <circle cx="0" cy="0" r="14" fill="#0284C7" stroke="#FFFFFF" stroke-width="3" />
+        <circle cx="0" cy="0" r="6" fill="#FFFFFF" />
+        <!-- User label -->
+        <rect x="-55" y="-36" width="110" height="22" rx="11" fill="rgba(2, 132, 199, 0.95)" />
+        <text x="0" y="-21" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="bold">YOU ARE HERE</text>
+      </g>
+
+      <!-- ================= FACILITY INTERACTIVE PINS ================= -->
+      <g id="facility-pins-layer">
+        <!-- 1. Restrooms -->
+        <g class="pin" id="pin-restroom_1" data-id="restroom_1" data-category="Restrooms" data-x="1080" data-y="695" onclick="selectFacility('restroom_1')">
+          <circle cx="1080" cy="695" r="20" fill="#06B6D4" class="pin-circle" />
+          <text x="1080" y="702" font-size="16" text-anchor="middle">🚻</text>
+        </g>
+        <g class="pin" id="pin-restroom_2" data-id="restroom_2" data-category="Restrooms" data-x="440" data-y="340" onclick="selectFacility('restroom_2')">
+          <circle cx="440" cy="340" r="20" fill="#06B6D4" class="pin-circle" />
+          <text x="440" y="347" font-size="16" text-anchor="middle">🚻</text>
+        </g>
+        <g class="pin" id="pin-restroom_3" data-id="restroom_3" data-category="Restrooms" data-x="1240" data-y="490" onclick="selectFacility('restroom_3')">
+          <circle cx="1240" cy="490" r="20" fill="#06B6D4" class="pin-circle" />
+          <text x="1240" y="497" font-size="16" text-anchor="middle">🚻</text>
+        </g>
+
+        <!-- 2. Charging Stations -->
+        <g class="pin" id="pin-charging_1" data-id="charging_1" data-category="Charging Stations" data-x="1080" data-y="770" onclick="selectFacility('charging_1')">
+          <circle cx="1080" cy="770" r="20" fill="#10B981" class="pin-circle" />
+          <text x="1080" y="777" font-size="16" text-anchor="middle">🔋</text>
+        </g>
+        <g class="pin" id="pin-charging_2" data-id="charging_2" data-category="Charging Stations" data-x="1010" data-y="620" onclick="selectFacility('charging_2')">
+          <circle cx="1010" cy="620" r="20" fill="#10B981" class="pin-circle" />
+          <text x="1010" y="627" font-size="16" text-anchor="middle">🔋</text>
+        </g>
+
+        <!-- 3. Food & Dining -->
+        <g class="pin" id="pin-food_1" data-id="food_1" data-category="Food & Dining" data-x="920" data-y="700" onclick="selectFacility('food_1')">
+          <circle cx="920" cy="700" r="20" fill="#F97316" class="pin-circle" />
+          <text x="920" y="707" font-size="16" text-anchor="middle">☕</text>
+        </g>
+        <g class="pin" id="pin-food_2" data-id="food_2" data-category="Food & Dining" data-x="780" data-y="390" onclick="selectFacility('food_2')">
+          <circle cx="780" cy="390" r="20" fill="#F97316" class="pin-circle" />
+          <text x="780" y="397" font-size="16" text-anchor="middle">🍔</text>
+        </g>
+        <g class="pin" id="pin-food_3" data-id="food_3" data-category="Food & Dining" data-x="1080" data-y="625" onclick="selectFacility('food_3')">
+          <circle cx="1080" cy="625" r="20" fill="#F97316" class="pin-circle" />
+          <text x="1080" y="632" font-size="16" text-anchor="middle">🍵</text>
+        </g>
+        <g class="pin" id="pin-food_4" data-id="food_4" data-category="Food & Dining" data-x="640" data-y="440" onclick="selectFacility('food_4')">
+          <circle cx="640" cy="440" r="20" fill="#F97316" class="pin-circle" />
+          <text x="640" y="447" font-size="16" text-anchor="middle">🍺</text>
+        </g>
+
+        <!-- 4. Airport Lounges -->
+        <g class="pin" id="pin-lounge_1" data-id="lounge_1" data-category="Airport Lounges" data-x="880" data-y="410" onclick="selectFacility('lounge_1')">
+          <circle cx="880" cy="410" r="22" fill="#8B5CF6" class="pin-circle" />
+          <text x="880" y="417" font-size="17" text-anchor="middle">🛋</text>
+        </g>
+        <g class="pin" id="pin-lounge_2" data-id="lounge_2" data-category="Airport Lounges" data-x="960" data-y="540" onclick="selectFacility('lounge_2')">
+          <circle cx="960" cy="540" r="22" fill="#8B5CF6" class="pin-circle" />
+          <text x="960" y="547" font-size="17" text-anchor="middle">🛋</text>
+        </g>
+
+        <!-- 5. Duty Free & Shopping -->
+        <g class="pin" id="pin-shop_1" data-id="shop_1" data-category="Duty Free & Shopping" data-x="730" data-y="460" onclick="selectFacility('shop_1')">
+          <circle cx="730" cy="460" r="20" fill="#EC4899" class="pin-circle" />
+          <text x="730" y="467" font-size="16" text-anchor="middle">🛍</text>
+        </g>
+        <g class="pin" id="pin-shop_2" data-id="shop_2" data-category="Duty Free & Shopping" data-x="1080" data-y="795" onclick="selectFacility('shop_2')">
+          <circle cx="1080" cy="795" r="20" fill="#EC4899" class="pin-circle" />
+          <text x="1080" y="802" font-size="16" text-anchor="middle">📚</text>
+        </g>
+
+        <!-- 6. Medical Center -->
+        <g class="pin" id="pin-medical_1" data-id="medical_1" data-category="Medical Center" data-x="280" data-y="420" onclick="selectFacility('medical_1')">
+          <circle cx="280" cy="420" r="20" fill="#EF4444" class="pin-circle" />
+          <text x="280" y="427" font-size="16" text-anchor="middle">🏥</text>
+        </g>
+        <g class="pin" id="pin-medical_2" data-id="medical_2" data-category="Medical Center" data-x="1080" data-y="560" onclick="selectFacility('medical_2')">
+          <circle cx="1080" cy="560" r="20" fill="#EF4444" class="pin-circle" />
+          <text x="1080" y="567" font-size="16" text-anchor="middle">💊</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Map HUD Floating Zoom / Pan Controls -->
+  <div class="hud-panel">
+    <div class="hud-btn" onclick="zoomIn()" title="Zoom In">+</div>
+    <div class="hud-btn" onclick="zoomOut()" title="Zoom Out">−</div>
+    <div class="hud-btn" onclick="recenterMap()" title="Center User">🎯</div>
+  </div>
+</div>
+
+<script>
+  // Canvas Pan & Zoom Physics
+  let scale = 0.85;
+  let posX = -120;
+  let posY = -40;
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  let lastTouchDist = 0;
+
+  const container = document.getElementById('map-canvas-container');
+  const viewport = document.getElementById('map-viewport');
+  const routePath = document.getElementById('dynamic-walking-route');
+  const navBadge = document.getElementById('nav-badge');
+
+  function updateTransform() {
+    container.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+  }
+  updateTransform();
+
+  // Mouse / Touch Dragging
+  viewport.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX - posX;
+    startY = e.clientY - posY;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    posX = e.clientX - startX;
+    posY = e.clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('mouseup', () => { isDragging = false; });
+
+  // Touch handling (pinch zoom + pan)
+  viewport.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      startX = e.touches[0].clientX - posX;
+      startY = e.touches[0].clientY - posY;
+    } else if (e.touches.length === 2) {
+      isDragging = false;
+      lastTouchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    }
+  }, { passive: true });
+
+  viewport.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1 && isDragging) {
+      posX = e.touches[0].clientX - startX;
+      posY = e.touches[0].clientY - startY;
+      updateTransform();
+    } else if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      if (lastTouchDist > 0) {
+        const factor = dist / lastTouchDist;
+        scale = Math.min(Math.max(0.45, scale * factor), 2.5);
+        updateTransform();
+      }
+      lastTouchDist = dist;
+    }
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', () => {
+    isDragging = false;
+    lastTouchDist = 0;
+  });
+
+  function zoomIn() {
+    scale = Math.min(2.5, scale * 1.25);
+    updateTransform();
+  }
+  function zoomOut() {
+    scale = Math.max(0.45, scale / 1.25);
+    updateTransform();
+  }
+  function recenterMap() {
+    scale = 0.9;
+    posX = -120;
+    posY = -40;
+    updateTransform();
+  }
+
+  // Facility coordinates map for navigation
+  const facilityCoords = {
+    'restroom_1': { x: 1080, y: 695 },
+    'restroom_2': { x: 440, y: 340 },
+    'restroom_3': { x: 1240, y: 490 },
+    'charging_1': { x: 1080, y: 770 },
+    'charging_2': { x: 1010, y: 620 },
+    'food_1': { x: 920, y: 700 },
+    'food_2': { x: 780, y: 390 },
+    'food_3': { x: 1080, y: 625 },
+    'food_4': { x: 640, y: 440 },
+    'lounge_1': { x: 880, y: 410 },
+    'lounge_2': { x: 960, y: 540 },
+    'shop_1': { x: 730, y: 460 },
+    'shop_2': { x: 1080, y: 795 },
+    'medical_1': { x: 280, y: 420 },
+    'medical_2': { x: 1080, y: 560 }
+  };
+
+  const userPos = { x: 680, y: 480 };
+
+  // Select a facility
+  function selectFacility(id) {
+    document.querySelectorAll('.pin').forEach(p => p.classList.remove('selected'));
+    const targetPin = document.getElementById('pin-' + id);
+    if (targetPin) {
+      targetPin.classList.add('selected');
+    }
+    // Notify Android Activity
+    if (window.Android && window.Android.onFacilityClicked) {
+      window.Android.onFacilityClicked(id);
+    }
+  }
+
+  // Draw Animated Walking Route to facility
+  function drawRouteTo(id) {
+    const dest = facilityCoords[id];
+    if (!dest) return;
+
+    // Concourse corridor pathfinding waypoints:
+    // Move from User -> Concourse spine (y=450) -> Wing corridor -> Destination
+    let dStr = `M ${userPos.x} ${userPos.y}`;
+
+    if (dest.y < 360) {
+      // Heading north to Concourse A
+      dStr += ` L ${userPos.x} 450 L 380 450 L 380 ${dest.y} L ${dest.x} ${dest.y}`;
+    } else if (dest.y > 520) {
+      // Heading south to Concourse B
+      dStr += ` L ${userPos.x} 450 L 1020 450 L 1020 ${dest.y} L ${dest.x} ${dest.y}`;
+    } else {
+      // In main spine / Rotunda
+      dStr += ` L ${userPos.x} 450 L ${dest.x} 450 L ${dest.x} ${dest.y}`;
+    }
+
+    routePath.setAttribute('d', dStr);
+    navBadge.style.display = 'flex';
+
+    // Smoothly pan camera to show route
+    const midX = (userPos.x + dest.x) / 2;
+    const midY = (userPos.y + dest.y) / 2;
+    const vw = viewport.clientWidth || 400;
+    const vh = viewport.clientHeight || 700;
+
+    posX = (vw / 2) - (midX * scale);
+    posY = (vh / 2) - (midY * scale);
+    updateTransform();
+  }
+
+  function clearRoute() {
+    routePath.setAttribute('d', '');
+    navBadge.style.display = 'none';
+  }
+
+  // Filter Pins by Category
+  function filterCategory(category) {
+    clearRoute();
+    const pins = document.querySelectorAll('.pin');
+    pins.forEach(pin => {
+      const pinCat = pin.getAttribute('data-category');
+      if (!category || category === 'All' || pinCat.toLowerCase().includes(category.toLowerCase())) {
+        pin.style.display = 'block';
+        pin.style.opacity = '1';
+      } else {
+        pin.style.display = 'none';
+        pin.style.opacity = '0';
+      }
+    });
+  }
+
+  function setAirportTitle(title) {
+    if (title) {
+      document.getElementById('airport-tag').innerText = title.toUpperCase();
+    }
+  }
+</script>
+</body>
+</html>

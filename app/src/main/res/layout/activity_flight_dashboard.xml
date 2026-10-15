@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Top Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/backToHomeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="← HOME"
+                android:textSize="12sp"
+                android:backgroundTint="@color/primary_dark"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="FLIGHT DASHBOARD"
+                android:textColor="@color/primary_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Flight Details Summary Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="@color/primary_dark"
+            android:padding="20dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/dashFlightNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="AI 302"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/dashAirline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Air India"
+                    android:textColor="#BBDEFB"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/dashAirport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mumbai Chhatrapati Shivaji Maharaj Airport (BOM)"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_marginBottom="14dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terminal"
+                        android:textColor="#BBDEFB"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/dashTerminal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terminal 2"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gate"
+                        android:textColor="#BBDEFB"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/dashGate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gate B24"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Departure"
+                        android:textColor="#BBDEFB"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/dashDepartureTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18:30"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Module Actions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRIP COMPANION MODULES"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/dashLiveFlightBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="📡 LIVE FLIGHT TRACKING"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/dashAirportExplorerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="🧭 AIRPORT EXPLORER (NEARBY)"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/dashMapBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="🗺️ MAP &amp; NAVIGATION"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/dashChecklistBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="☑️ LAYOVER CHECKLIST"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/dashReminderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="⏰ BOARDING REMINDER"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
+
+    <!-- Main Container -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Fullscreen Interactive Airport Terminal Blueprint (Offline & Live Vector) -->
+        <WebView
+            android:id="@+id/terminalWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <!-- Fullscreen Google Map Fragment (Satellite / External View) -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- Top Header & Category Bar Container -->
+        <LinearLayout
+            android:id="@+id/topBarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#CCFFFFFF"
+            android:elevation="6dp">
+
+            <!-- Top Header Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="8dp">
+
+                <Button
+                    android:id="@+id/backFromMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:text="← BACK"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/primary_dark"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/mapAirportTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AIRPORT MAP &amp; PLACES"
+                        android:textColor="@color/primary_dark"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/placesApiStatusBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="● Google Places &amp; GPS Active"
+                        android:textColor="@color/success"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- View Mode Switcher: Terminal Floor Map vs Google Map -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_segmented_switch"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <Button
+                        android:id="@+id/btnModeTerminal"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="🏢 Terminal Floor Map"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/primary"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/btnModeSatellite"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="🗺️ Google Satellite"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Horizontal Scrollable Category Chips -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/chipAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🌟 All Places"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/primary"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipRestrooms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🚻 Restrooms"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipFood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🍔 Dining"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipLounges"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🛋 Lounges"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipCharging"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🔋 Charging"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipShopping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🛍 Shopping"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/chipMedical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🏥 Medical"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_primary"
+                        android:backgroundTint="@color/white" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+
+        <!-- Floating Map Action Buttons (Right Side) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/topBarContainer"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnGpsLocate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Locate Me GPS"
+                android:backgroundTint="@color/white"
+                app:tint="@color/primary"
+                app:srcCompat="@drawable/ic_my_location"
+                app:fabSize="mini"
+                android:layout_marginBottom="10dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnRecenterAirport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Recenter Airport"
+                android:backgroundTint="@color/white"
+                app:tint="@color/primary_dark"
+                app:srcCompat="@drawable/ic_recenter"
+                app:fabSize="mini" />
+        </LinearLayout>
+
+        <!-- Bottom Facility Detail Card (Appears when pin is tapped) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/facilityDetailCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="10dp"
+            app:cardBackgroundColor="@color/white"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Header row: Name + Close button -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/cardFacilityEmoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="☕"
+                        android:textSize="24sp"
+                        android:layout_marginEnd="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/cardFacilityName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Starbucks Reserve Coffee"
+                            android:textColor="@color/text_primary"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/cardFacilityLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terminal 2 • Opposite Gate B21"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/cardCloseBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="✕"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:backgroundTint="#F0F0F0"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_color"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Badges Row: Rating, Hours, Walking Time -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/cardRatingText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="★ 4.7"
+                        android:textColor="@color/accent"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:id="@+id/cardHoursText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🟢 Open 24 Hours"
+                        android:textColor="@color/success"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="12dp" />
+
+                    <TextView
+                        android:id="@+id/cardDistanceText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🚶 ~120m (2 min walk)"
+                        android:textColor="@color/primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/cardDescriptionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fresh espresso, cold brew, sandwiches, pastries and charging outlets."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- Navigation Action Button -->
+                <Button
+                    android:id="@+id/btnStartNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="🚶 START WALKING ROUTE"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/homeAppTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="✈️ GATECRASH"
+                android:textColor="@color/primary_dark"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LOGOUT"
+                android:textSize="12sp"
+                android:backgroundTint="#D32F2F"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!-- Welcome Greeting -->
+        <TextView
+            android:id="@+id/welcomeGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome, Passenger"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your next flight layover companion"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Next Flight Card -->
+        <LinearLayout
+            android:id="@+id/flightCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/ic_launcher_background"
+            android:backgroundTint="@color/primary"
+            android:padding="20dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOUR NEXT FLIGHT"
+                android:textColor="#E0E0E0"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/flightNumberText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="AI 302"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/flightStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ON TIME"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="#2E7D32"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/flightRouteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delhi (DEL)  ➔  Mumbai (BOM)"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terminal"
+                        android:textColor="#E0E0E0"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/flightTerminalText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terminal 2"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gate"
+                        android:textColor="#E0E0E0"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/flightGateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gate B24"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Departure"
+                        android:textColor="#E0E0E0"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/flightTimeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18:30"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Quick Flight Actions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FLIGHT MANAGEMENT"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/addFlightBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="➕ ADD FLIGHT"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/flightDashboardBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📊 DASHBOARD"
+                android:backgroundTint="@color/primary_dark"
+                android:textColor="@color/white"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <!-- Core Modules Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LAYOVER &amp; SERVICES"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Button
+                android:id="@+id/liveFlightBtn"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="📡 LIVE FLIGHT"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_dark"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/airportExplorerBtn"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="🧭 EXPLORER"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_dark"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Button
+                android:id="@+id/checklistBtn"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="☑️ CHECKLIST"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_dark"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/reminderBtn"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="⏰ REMINDER"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_dark"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

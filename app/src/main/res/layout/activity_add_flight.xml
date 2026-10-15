@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Top Header Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="✈️ FIND &amp; TRACK FLIGHT"
+                android:textColor="@color/primary_dark"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/cancelFlightBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:textSize="12sp"
+                android:backgroundTint="#757575"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Just enter your flight number. Live Flight Tracking and Google Places API will fetch all details automatically."
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- THE ONLY INPUT: Flight Number & Search Button -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/primary"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FLIGHT NUMBER"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/flightNumberInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="e.g. AI 302, 6E 204, EK 500"
+                        android:inputType="textCapCharacters"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:padding="12dp"
+                        android:background="@android:drawable/editbox_background_normal" />
+
+                    <Button
+                        android:id="@+id/btnDetectFlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SEARCH"
+                        android:textStyle="bold"
+                        android:backgroundTint="@color/primary"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <!-- Quick Tap Chips for instant demonstration -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Popular flights (tap to test):"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="6dp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/chipsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/chipAi302"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ AI 302"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginEnd="6dp"
+                            android:paddingHorizontal="10dp" />
+
+                        <Button
+                            android:id="@+id/chip6e204"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ 6E 204"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginEnd="6dp"
+                            android:paddingHorizontal="10dp" />
+
+                        <Button
+                            android:id="@+id/chipUk955"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ UK 955"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginEnd="6dp"
+                            android:paddingHorizontal="10dp" />
+
+                        <Button
+                            android:id="@+id/chipEk500"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ EK 500"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginEnd="6dp"
+                            android:paddingHorizontal="10dp" />
+
+                        <Button
+                            android:id="@+id/chipBa198"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ BA 198"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginEnd="6dp"
+                            android:paddingHorizontal="10dp" />
+
+                        <Button
+                            android:id="@+id/chipAa292"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="✈️ AA 292"
+                            android:textSize="11sp"
+                            android:backgroundTint="@color/primary_light"
+                            android:textColor="@color/primary_dark"
+                            android:paddingHorizontal="10dp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- AUTOMATICALLY RESOLVED FLIGHT DETAILS CARD -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/flightPreviewCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/primary_dark"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Header: Airline & Live Status Badge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:id="@+id/previewAirlineAndNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Air India • AI 302"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/previewStatusBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🟢 IN FLIGHT"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="#2E7D32"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/previewAircraft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Boeing 787-8 Dreamliner"
+                    android:textColor="#B0BEC5"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Route: Origin ➔ Destination -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/previewOriginCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DEL"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/previewOriginName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delhi Indira Gandhi"
+                            android:textColor="#ECEFF1"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✈️ ➔"
+                        android:textColor="#FFB74D"
+                        android:textSize="20sp"
+                        android:layout_marginHorizontal="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/previewDestCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="BOM"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/previewDestName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mumbai CSMI T2"
+                            android:textColor="#ECEFF1"
+                            android:textSize="12sp"
+                            android:gravity="end" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Divider line -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#37474F"
+                    android:layout_marginVertical="12dp" />
+
+                <!-- Schedule & Concourse Info -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DEPARTURE ➔ ARRIVAL"
+                            android:textColor="#90A4AE"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/previewScheduleTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="14:00 ➔ 16:15"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="end">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CONCOURSE &amp; GATE"
+                            android:textColor="#90A4AE"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/previewTerminalGate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terminal 2 • Gate B24"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/previewBaggage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🧳 Baggage Claim: Belt 2"
+                        android:textColor="#FFE082"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Google Places Verified Badge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="#1B3358"
+                    android:padding="10dp"
+                    android:layout_marginTop="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📍 "
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/previewPlacesVerifiedText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Google Places API: Chhatrapati Shivaji Maharaj International Airport (BOM)"
+                        android:textColor="#80D8FF"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Save Button: One Tap to Confirm & Track -->
+        <Button
+            android:id="@+id/saveFlightBtn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="✈️ CONFIRM &amp; TRACK THIS FLIGHT"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:layout_marginBottom="24dp" />
+
+    </LinearLayout>
+</ScrollView>

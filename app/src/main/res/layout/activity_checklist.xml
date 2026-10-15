@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="@color/white">
+
+        <Button
+            android:id="@+id/backFromChecklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="← BACK"
+            android:textSize="12sp"
+            android:backgroundTint="@color/primary_dark"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="LAYOVER CHECKLIST"
+            android:textColor="@color/primary_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="end" />
+    </LinearLayout>
+
+    <!-- Add Task Input Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:layout_marginBottom="8dp">
+
+        <EditText
+            android:id="@+id/taskInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Add new task (e.g. Buy water)"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background_normal" />
+
+        <Button
+            android:id="@+id/addTaskBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Task List Container -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:id="@+id/tasksContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/checkTask1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check next flight live status"
+                android:textSize="15sp"
+                android:checked="true"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/checkTask2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Find Gate B24 on airport map"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/checkTask3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Charge phone at charging station"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/checkTask4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Grab food / coffee at Terminal Food Court"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/checkTask5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Visit restroom before boarding starts"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+            <CheckBox
+                android:id="@+id/checkTask6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reach boarding gate at least 25 mins prior"
+                android:textSize="15sp"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

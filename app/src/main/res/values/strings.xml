@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GATECRASH</string>
+    <string name="google_maps_key" translatable="false">AIzaSyANkNFTbtOuEe8i89wmuJRs3vwcpdTCRU8</string>
+    <string name="aviationstack_api_key" translatable="false">c16b48e8c42943ed9b5c63280c65a056</string>
+</resources>
